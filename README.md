@@ -1,3 +1,3 @@
-# Angular State Management Using NgRx
+# Securing LocalStorage in Angular using CryptoJS
 
-This code sample demonstrates a basic implementation of NgRx for those who want to get started with the Redux pattern in Angular.  For more complete instructions, read the tutorial at https://medium.com/@maloric/angular-state-management-using-ngrx-f9d0e92f617a.
+This code sample demonstrates a basic implementation of CryptoJS for those who want to store data in a secure way in localStorage.
