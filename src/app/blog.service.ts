@@ -5,17 +5,15 @@ import { map } from 'rxjs/operators';
 import { POSTS } from './data/posts';
 import { AppState } from './data/reducer.js';
 import { ProvidePosts, DeletePost, ProvidePost } from './data/actions';
-import { LocalService } from './local.service';
-import * as CryptoJS from 'crypto-js';
+import { StorageService } from './storage.service';
 @Injectable({
   providedIn: 'root'
 })
 export class BlogService {
-  encryptSecretKey = "123456789";
 
   constructor(
     private store: Store<AppState>,
-    private localService: LocalService
+    private storageService: StorageService
   ) { }
 
   post$: Observable<any> = this.store
@@ -42,46 +40,15 @@ export class BlogService {
   }
 
   detailPost(post: any) {
-    let data = JSON.stringify(post);
-    let encrypted = this.encryptData(data);
-
-    console.log("Encrypted");
-    console.log(encrypted);
-
-    localStorage.setItem('item', encrypted);
-  }
+    this.storageService.setData('item', post);
+  } 
 
   getDetailedPost() {
-    let data = localStorage.getItem('item');
-    let decrypted = JSON.parse(this.decryptData(data));
-    
-    console.log("Decrypted");
-    console.log(decrypted);
-
-    return decrypted;
+    return this.storageService.getData('item');
   }
 
   removeDetailedPost() {
-    localStorage.removeItem('item');
+    this.storageService.removeData('item');
   }
-
-  encryptData(data) {
-    try {
-      return CryptoJS.AES.encrypt(JSON.stringify(data), this.encryptSecretKey).toString();
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  decryptData(data) {
-    try {
-      const bytes = CryptoJS.AES.decrypt(data, this.encryptSecretKey);
-      if (bytes.toString()) {
-        return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-      }
-      return data;
-    } catch (e) {
-      console.log(e);
-    }
-  }
+  
 }
